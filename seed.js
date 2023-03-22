@@ -1,3 +1,4 @@
+const { db, Emoji } = require("./prisma/schema.prisma")
 const animalEmojis = [
   {
     emoji: "😺",
@@ -1580,5 +1581,22 @@ const animalEmojis = [
     cColor: "",
     dColor: "",
     eColor: "",
-  },
+  }
 ];
+
+const seed = async () => {
+  try{
+    await db.sync({force:true});
+    await Promise.all(animalEmojis.map(animal => {
+      return Emoji.create(animal);
+
+    }))
+    console.log('🌰➤Seeding success!➤🌳')
+    db.close()
+  } catch(error){
+    console.error('something went wrong')
+    console.error(error)
+    db.close()
+  }
+}
+seed();
